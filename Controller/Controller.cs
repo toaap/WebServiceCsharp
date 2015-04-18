@@ -9,6 +9,8 @@ using System.Web;
 /// </summary>
 public class Controller
 {
+	
+	//hej
     private DataAccessLayer dal = new DataAccessLayer();
 
 	public Controller()
