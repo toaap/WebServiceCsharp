@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ProgramKonstruktionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Apartment">
+          <Key>
+            <PropertyRef Name="apartmentNr" />
+          </Key>
+          <Property Name="apartmentNr" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BookingList">
+          <Key>
+            <PropertyRef Name="apartmentNr" />
+          </Key>
+          <Property Name="apartmentNr" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="bookedDate" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="bookedLaundryTime" Type="varchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LaundryTime">
+          <Key>
+            <PropertyRef Name="bookedLaundryTime" />
+          </Key>
+          <Property Name="bookedLaundryTime" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="FK_APARTMENTNR_APARTMENT">
+          <End Role="Apartment" Type="Self.Apartment" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BookingList" Type="Self.BookingList" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Apartment">
+              <PropertyRef Name="apartmentNr" />
+            </Principal>
+            <Dependent Role="BookingList">
+              <PropertyRef Name="apartmentNr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME">
+          <End Role="LaundryTime" Type="Self.LaundryTime" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BookingList" Type="Self.BookingList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LaundryTime">
+              <PropertyRef Name="bookedLaundryTime" />
+            </Principal>
+            <Dependent Role="BookingList">
+              <PropertyRef Name="bookedLaundryTime" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProgramKonstruktionModelStoreContainer">
+          <EntitySet Name="Apartment" EntityType="Self.Apartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookingList" EntityType="Self.BookingList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LaundryTime" EntityType="Self.LaundryTime" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_APARTMENTNR_APARTMENT" Association="Self.FK_APARTMENTNR_APARTMENT">
+            <End Role="Apartment" EntitySet="Apartment" />
+            <End Role="BookingList" EntitySet="BookingList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME" Association="Self.FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME">
+            <End Role="LaundryTime" EntitySet="LaundryTime" />
+            <End Role="BookingList" EntitySet="BookingList" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProgramKonstruktionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Apartment">
+          <Key>
+            <PropertyRef Name="apartmentNr" />
+          </Key>
+          <Property Name="apartmentNr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="BookingList" Relationship="Self.FK_APARTMENTNR_APARTMENT" FromRole="Apartment" ToRole="BookingList" />
+        </EntityType>
+        <EntityType Name="BookingList">
+          <Key>
+            <PropertyRef Name="apartmentNr" />
+          </Key>
+          <Property Name="apartmentNr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="bookedDate" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="bookedLaundryTime" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Apartment" Relationship="Self.FK_APARTMENTNR_APARTMENT" FromRole="BookingList" ToRole="Apartment" />
+          <NavigationProperty Name="LaundryTime" Relationship="Self.FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME" FromRole="BookingList" ToRole="LaundryTime" />
+        </EntityType>
+        <EntityType Name="LaundryTime">
+          <Key>
+            <PropertyRef Name="bookedLaundryTime" />
+          </Key>
+          <Property Name="bookedLaundryTime" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BookingList" Relationship="Self.FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME" FromRole="LaundryTime" ToRole="BookingList" />
+        </EntityType>
+        <Association Name="FK_APARTMENTNR_APARTMENT">
+          <End Role="Apartment" Type="Self.Apartment" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BookingList" Type="Self.BookingList" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Apartment">
+              <PropertyRef Name="apartmentNr" />
+            </Principal>
+            <Dependent Role="BookingList">
+              <PropertyRef Name="apartmentNr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME">
+          <End Role="LaundryTime" Type="Self.LaundryTime" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BookingList" Type="Self.BookingList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LaundryTime">
+              <PropertyRef Name="bookedLaundryTime" />
+            </Principal>
+            <Dependent Role="BookingList">
+              <PropertyRef Name="bookedLaundryTime" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProgramKonstruktionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Apartment" EntityType="Self.Apartment" />
+          <EntitySet Name="BookingList" EntityType="Self.BookingList" />
+          <EntitySet Name="LaundryTime" EntityType="Self.LaundryTime" />
+          <AssociationSet Name="FK_APARTMENTNR_APARTMENT" Association="Self.FK_APARTMENTNR_APARTMENT">
+            <End Role="Apartment" EntitySet="Apartment" />
+            <End Role="BookingList" EntitySet="BookingList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME" Association="Self.FK_LAUNDRYTIME_BOOKEDLAUNDRYTIME">
+            <End Role="LaundryTime" EntitySet="LaundryTime" />
+            <End Role="BookingList" EntitySet="BookingList" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProgramKonstruktionModelStoreContainer" CdmEntityContainer="ProgramKonstruktionEntities">
+          <EntitySetMapping Name="Apartment">
+            <EntityTypeMapping TypeName="ProgramKonstruktionModel.Apartment">
+              <MappingFragment StoreEntitySet="Apartment">
+                <ScalarProperty Name="apartmentNr" ColumnName="apartmentNr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookingList">
+            <EntityTypeMapping TypeName="ProgramKonstruktionModel.BookingList">
+              <MappingFragment StoreEntitySet="BookingList">
+                <ScalarProperty Name="apartmentNr" ColumnName="apartmentNr" />
+                <ScalarProperty Name="bookedDate" ColumnName="bookedDate" />
+                <ScalarProperty Name="bookedLaundryTime" ColumnName="bookedLaundryTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LaundryTime">
+            <EntityTypeMapping TypeName="ProgramKonstruktionModel.LaundryTime">
+              <MappingFragment StoreEntitySet="LaundryTime">
+                <ScalarProperty Name="bookedLaundryTime" ColumnName="bookedLaundryTime" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
